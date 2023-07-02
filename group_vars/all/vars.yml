@@ -1,0 +1,7 @@
+username: kris
+packages:
+    - vim
+    - neofetch
+    - htop
+    - tmux
+    - speedtest-cli
