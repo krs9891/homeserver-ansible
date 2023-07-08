@@ -1,11 +1,12 @@
 ---
 username: kris
+password: changeme
+shell: /bin/bash
+ssh_port: 22
+
 packages:
-    - fish
     - vim
     - neofetch
     - htop
     - tmux
     - speedtest-cli
-
-shell: /usr/bin/bash
