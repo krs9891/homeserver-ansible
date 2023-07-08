@@ -1,0 +1,7 @@
+---
+- name: Mount my nas drive
+  ansible.posix.mount:
+    path: /mnt/nas_drive
+    src: LABEL=nas_drive
+    fstype: ntfs
+    state: mounted

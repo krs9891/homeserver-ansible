@@ -1,0 +1,15 @@
+---
+- name: Modify laptop lid closing settings
+  lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: '^#?HandleLidSwitch=.*'
+      line: 'HandleLidSwitch=ignore'
+    - regexp: '^#?HandleLidSwitchExternalPower=.*'
+      line: 'HandleLidSwitchExternalPower=ignore' 
+    - regexp: '^#?HandleLidSwitchDocked=.*'
+      line: 'HandleLidSwitchDocked=ignore' 
+  notify: Restart systemd-logind
