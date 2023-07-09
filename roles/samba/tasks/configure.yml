@@ -1,0 +1,27 @@
+---
+- name: Configuring samba shares
+  template:
+    src: homeserver_smb.conf
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart smbd
+
+- name: Allow Samba traffic in firewall
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop:
+    - "445"
+    - "139"
+
+- name: Recursively change ownership of a directory /share
+  file:
+    path: /mnt/nas_drive/share
+    state: directory
+    recurse: yes
+    owner: "{{ systemuser }}"
+    group: "{{ systemgroup }}"
+    mode: 0775

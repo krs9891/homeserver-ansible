@@ -1,0 +1,16 @@
+---
+- name: create system group
+  group:
+    name: "{{ systemgroup }}"
+    system: true
+
+- name: create system user
+  user:
+    name: "{{ systemuser }}"
+    groups: "{{ systemgroup }}"
+    append: true
+    create_home: false
+    system: true
+    shell: /usr/bin/false
+
+

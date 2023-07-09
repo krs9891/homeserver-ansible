@@ -5,3 +5,4 @@
   roles:
     - role: system
     - role: dell
+    - role: samba
