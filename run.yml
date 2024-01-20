@@ -4,7 +4,6 @@
 
   roles:
     - role: system
-    - role: dell
-    - role: samba
+    # - role: samba
     - role: docker-role
       tags: docker
