@@ -1,0 +1,6 @@
+- name: Mount SSD drive
+  ansible.posix.mount:
+    path: "{{ mount_path }}"
+    src: "LABEL={{ drive_label }}"
+    fstype: "{{ fstype }}"
+    state: mounted

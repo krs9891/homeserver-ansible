@@ -5,8 +5,12 @@ shell: /bin/bash
 ssh_port: 22
 
 packages:
-    - vim
-    - neofetch
-    - htop
-    - tmux
-    - speedtest-cli
+  - vim
+  - neofetch
+  - htop
+  - tmux
+  - speedtest-cli
+
+drive_label: data
+mount_path: /media/data
+fstype: ext4
