@@ -2,7 +2,7 @@
 - name: Update packages
   apt:
     update_cache: yes
-    upgrade: yes
+    upgrade: dist
 
 - name: Install essential packages
   package:
