@@ -1,11 +1,12 @@
 ---
 username: kris
 packages:
-    - fish
-    - vim
-    - neofetch
-    - htop
-    - tmux
-    - speedtest-cli
+  - fish
+  - vim
+  - neofetch
+  - htop
+  - tmux
+  - speedtest-cli
+  - ufw
 
 shell: /usr/bin/bash

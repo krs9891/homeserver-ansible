@@ -17,9 +17,9 @@
     - "445"
     - "139"
 
-- name: Recursively change ownership of a directory /share
+- name: Recursively change ownership of a directory
   file:
-    path: /mnt/nas_drive/share
+    path: "{{ mount_path }}"
     state: directory
     recurse: yes
     owner: "{{ systemuser }}"
