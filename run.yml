@@ -7,3 +7,5 @@
     - role: samba
     - role: docker-role
       tags: docker
+    - role: portainer
+      tags: portainer
