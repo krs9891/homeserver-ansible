@@ -1,0 +1,46 @@
+---
+- name: Install related Ubuntu packages
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - python3-pip
+      - mc
+
+- name: Install python packages
+  pip:
+    name: docker
+
+- name: Create portainer directory
+  file:
+    path: "{{ portainer_data_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install portainer
+  docker_container:
+    name: portainer
+    image: portainer/portainer
+    restart_policy: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "{{ portainer_data_path }}:/data"
+
+- name: Open portainer port
+  ufw:
+    rule: allow
+    port: 9000
+    proto: tcp
+    state: enabled
+
+- name: (Re)open SSH port # for some reason after portainer installation SSH port is closed
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+    state: enabled
