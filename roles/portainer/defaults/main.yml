@@ -1,0 +1,3 @@
+---
+# defaults file for your role
+portainer_data_path: /opt/portainer
