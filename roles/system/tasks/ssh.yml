@@ -5,7 +5,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     state: present
-    validate: 'sshd -T -f %s'
+    validate: "sshd -T -f %s"
     mode: 0644
   with_items:
     - regexp: "^PasswordAuthentication"
@@ -25,3 +25,10 @@
     - regexp: "^X11Forwarding"
       line: "X11Forwarding no"
   notify: Restart SSH daemon
+
+- name: open SSH port
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+    state: enabled

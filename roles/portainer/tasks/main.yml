@@ -37,10 +37,3 @@
     port: 9000
     proto: tcp
     state: enabled
-
-- name: (Re)open SSH port # for some reason after portainer installation SSH port is closed
-  ufw:
-    rule: allow
-    port: 22
-    proto: tcp
-    state: enabled
