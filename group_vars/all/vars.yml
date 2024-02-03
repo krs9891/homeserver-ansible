@@ -8,5 +8,6 @@ packages:
   - tmux
   - speedtest-cli
   - ufw
+  - apache2-utils
 
 shell: /usr/bin/bash

@@ -1,0 +1,5 @@
+---
+- include_tasks: create_files.yml
+- include_tasks: firewall.yml
+- include_tasks: user.yml
+- include_tasks: install.yml

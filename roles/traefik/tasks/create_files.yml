@@ -1,0 +1,23 @@
+---
+- name: Create traefik directory
+  file:
+    path: "{{ traefik_data_path }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Create traefik acme.json file
+  file:
+    path: "{{ traefik_data_path }}/acme.json"
+    state: touch
+    mode: 0600
+
+- name: Add traefik.yml file
+  template:
+    src: traefik.yml.j2
+    dest: "{{ traefik_data_path }}/traefik.yml"
+
+- name: Create config.yml file
+  file:
+    path: "{{ traefik_data_path }}/config.yml"
+    state: touch
