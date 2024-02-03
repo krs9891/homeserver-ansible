@@ -1,4 +1,13 @@
 ---
+- name: Deny all incoming traffic to ports 80 and 443
+  ufw:
+    rule: deny
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 80
+    - 443
+
 - name: Fetch Cloudflare IPv4 ranges
   ansible.builtin.uri:
     url: https://api.cloudflare.com/client/v4/ips
@@ -7,26 +16,25 @@
     headers:
       Content-Type: "application/json"
   register: cf_ips_response
-  # delegate_to: localhost # This task runs on the Ansible controller
 
 - name: Set fact for Cloudflare IPv4 ranges
   ansible.builtin.set_fact:
     cloudflare_ipv4_ranges: "{{ cf_ips_response.json.result.ipv4_cidrs }}"
 
-- name: Allow incoming traffic from Cloudflare IPv4 ranges
+- name: Allow incoming traffic to port 80 from Cloudflare IPv4 ranges
   ufw:
     rule: allow
     src: "{{ item }}"
+    port: "80"
+    proto: tcp
     comment: "Allow traffic from Cloudflare IP range"
   loop: "{{ cloudflare_ipv4_ranges }}"
 
-- name: open ports
+- name: Allow incoming traffic to port 443 from Cloudflare IPv4 ranges
   ufw:
     rule: allow
-    port: "{{ item }}"
+    src: "{{ item }}"
+    port: "443"
     proto: tcp
-    state: enabled
-  with_items:
-    - 80
-    - 443
-    - 8080
+    comment: "Allow traffic from Cloudflare IP range"
+  loop: "{{ cloudflare_ipv4_ranges }}"
