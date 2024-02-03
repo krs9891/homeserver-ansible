@@ -1,0 +1,16 @@
+---
+- name: Create config directory
+  file:
+    path: "{{ jellyfin_data_path }}/config"
+    state: directory
+    mode: "0755"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Create cache directory
+  file:
+    path: "{{ jellyfin_data_path }}/cache"
+    state: directory
+    mode: "0755"
+    owner: "{{ username }}"
+    group: "{{ username }}"
