@@ -1,0 +1,48 @@
+---
+- name: Create {{ proxy_network_name }} network
+  docker_network:
+    name: "{{ proxy_network_name }}"
+    state: present
+
+- name: Delpoy traefik
+  docker_container:
+    name: traefik
+    image: traefik
+    restart_policy: unless-stopped
+    recreate: true
+    container_default_behavior: no_defaults
+    networks_cli_compatible: yes
+    security_opts:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "{{ traefik_data_path }}/traefik.yml:/traefik.yml"
+      - "{{ traefik_data_path }}/acme.json:/acme.json"
+      - "{{ traefik_data_path }}/config.yml:/config.yml"
+    networks:
+      - name: "{{ proxy_network_name }}"
+    network_mode: "{{ proxy_network_name }}"
+    env:
+      CF_API_EMAIL: "{{ dns_api_email }}"
+      CF_API_KEY: "{{ dns_api_key }}"
+    labels:
+      com.docker.compose.project: "treafik"
+      traefik.enable: "true"
+      traefik.http.routers.traefik.entrypoints: "http"
+      traefik.http.routers.traefik.rule: "Host(`traefik.{{ domain }}`)"
+      traefik.http.middlewares.traefik-auth.basicauth.users: "{{ traefik_auth_user }}"
+      traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto: "https"
+      traefik.http.routers.traefik.middlewares: "traefik-https-redirect"
+      traefik.http.routers.traefik-secure.entrypoints: "https"
+      traefik.http.routers.traefik-secure.rule: "Host(`traefik.{{ domain }}`)"
+      traefik.http.routers.traefik-secure.middlewares: "traefik-auth"
+      traefik.http.routers.traefik-secure.tls: "true"
+      traefik.http.routers.traefik-secure.tls.certresolver: "cloudflare"
+      traefik.http.routers.traefik-secure.tls.domains[0].main: "{{ domain }}"
+      traefik.http.routers.traefik-secure.tls.domains[0].sans: "*.{{ domain }}"
+      traefik.http.routers.traefik-secure.service: "api@internal"

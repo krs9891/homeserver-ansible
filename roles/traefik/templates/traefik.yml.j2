@@ -22,7 +22,7 @@ providers:
 certificatesResolvers:
   cloudflare:
     acme:
-      email: you@example.com #secret
+      email: {{ dns_api_email }}
       storage: acme.json
       dnsChallenge:
         provider: cloudflare

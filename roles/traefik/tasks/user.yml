@@ -1,0 +1,9 @@
+---
+- name: Create traefik user
+  command: |
+    htpasswd -nbB "{{ traefik_user }}" "{{ traefik_password }}"
+  register: traefik_user_password
+
+- name: Set fact from output
+  set_fact:
+    traefik_auth_user: "{{ traefik_user_password.stdout }}"

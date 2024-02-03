@@ -1,0 +1,32 @@
+---
+- name: Fetch Cloudflare IPv4 ranges
+  ansible.builtin.uri:
+    url: https://api.cloudflare.com/client/v4/ips
+    return_content: yes
+    method: GET
+    headers:
+      Content-Type: "application/json"
+  register: cf_ips_response
+  # delegate_to: localhost # This task runs on the Ansible controller
+
+- name: Set fact for Cloudflare IPv4 ranges
+  ansible.builtin.set_fact:
+    cloudflare_ipv4_ranges: "{{ cf_ips_response.json.result.ipv4_cidrs }}"
+
+- name: Allow incoming traffic from Cloudflare IPv4 ranges
+  ufw:
+    rule: allow
+    src: "{{ item }}"
+    comment: "Allow traffic from Cloudflare IP range"
+  loop: "{{ cloudflare_ipv4_ranges }}"
+
+- name: open ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+    state: enabled
+  with_items:
+    - 80
+    - 443
+    - 8080
