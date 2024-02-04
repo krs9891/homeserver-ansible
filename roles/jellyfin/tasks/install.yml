@@ -15,8 +15,6 @@
       - "{{ mount_path }}/movies:/data/movies:rw"
     devices:
       - "/dev/dri:/dev/dri"
-    networks:
-      - name: "{{ proxy_network_name }}"
     network_mode: "{{ proxy_network_name }}"
     env:
       PUID: "{{ username }}"
