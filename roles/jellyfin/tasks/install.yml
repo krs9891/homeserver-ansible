@@ -2,7 +2,7 @@
 - name: Delploy jellyfin
   docker_container:
     name: jellyfin
-    image: jellyfin/jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
     restart_policy: unless-stopped
     recreate: true
     container_default_behavior: no_defaults
@@ -11,8 +11,10 @@
       - no-new-privileges:true
     volumes:
       - "{{ jellyfin_data_path }}/config:/config:rw"
-      - "{{ jellyfin_data_path }}/cache:/cache:rw"
-      - "{{ mount_path }}:/media:ro"
+      - "{{ mount_path }}/tv:/data/tvshows:rw"
+      - "{{ mount_path }}/movies:/data/movies:rw"
+    devices:
+      - "/dev/dri:/dev/dri"
     networks:
       - name: "{{ proxy_network_name }}"
     network_mode: "{{ proxy_network_name }}"
