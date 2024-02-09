@@ -11,8 +11,7 @@
       - no-new-privileges:true
     volumes:
       - "{{ jellyfin_data_path }}/config:/config:rw"
-      - "{{ mount_path }}/tv:/data/tvshows:rw"
-      - "{{ mount_path }}/movies:/data/movies:rw"
+      - "{{ mount_path }}/library:/data/media:rw"
     devices:
       - "/dev/dri:/dev/dri"
     network_mode: "{{ proxy_network_name }}"
