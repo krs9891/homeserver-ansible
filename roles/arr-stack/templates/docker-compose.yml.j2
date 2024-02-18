@@ -1,0 +1,76 @@
+version: "3.7"
+
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PUID={{ username }}
+      - PGID={{ username }}
+      - UMASK=002
+      - TZ={{ timezone }}
+      - WEBUI_PORTS=8080/tcp,8080/udp
+      - VPN_ENABLED=true
+      - VPN_PROVIDER=generic
+      - VPN_LAN_NETWORK=192.168.55.0/24
+      - VPN_CONF=wg0
+      # - VPN_ADDITIONAL_PORTS
+      - VPN_KEEP_LOCAL_DNS=false
+      - PRIVOXY_ENABLED=false
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - {{ container_data_path }}/qbit/config:/config
+      - {{ storage_path }}/torrents/:/data/torrents/:rw
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports:
+      - 7878:7878
+    environment:
+      - PUID={{ username }}
+      - PGID={{ username }}
+      - TZ={{ timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ container_data_path }}/radarr:/config
+      - {{ storage_path }}:/data
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports:
+      - 8989:8989
+    environment:
+      - PUID={{ username }}
+      - PGID={{ username }}
+      - TZ={{ timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ container_data_path }}/sonarr:/config
+      - {{ storage_path }}:/data
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID={{ username }}
+      - PGID={{ username }}
+      - UMASK=002
+      - TZ={{ timezone }}
+    volumes:
+      - {{ container_data_path }}/prowlarr:/config

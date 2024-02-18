@@ -1,0 +1,39 @@
+---
+- name: Create arr stack directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - "{{ container_data_path }}/qbit/config/wireguard"
+    - "{{ container_data_path }}/radarr"
+    - "{{ container_data_path }}/sonarr"
+    - "{{ container_data_path }}/prowlarr"
+
+- name: Copy wg0 config file for qbit
+  template:
+    src: wg0.conf
+    dest: "{{ container_data_path }}/qbit/config/wireguard/wg0.conf"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Copy docker compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ container_data_path }}/docker-compose.yml"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Deploy arr stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ container_data_path }}"
+    state: present
+    build: never
+    pull: missing
+    recreate: always
+    timeout: 300
+  tags: arr-stack

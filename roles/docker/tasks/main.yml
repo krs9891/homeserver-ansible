@@ -46,6 +46,12 @@
     update_cache: true
   become: true
 
+- name: "Docker | Install docker-compose Python library"
+  ansible.builtin.pip:
+    name: docker-compose
+    state: present
+  become: true
+
 - name: "Docker | Enable service"
   ansible.builtin.systemd:
     enabled: true
