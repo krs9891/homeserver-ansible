@@ -1,3 +1,4 @@
 timezone: Europe/Warsaw
 container_data_path: /home/kris/arr
 storage_path: /media/data
+nord_server: pl145
