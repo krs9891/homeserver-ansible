@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   qbittorrent:
     container_name: qbittorrent
@@ -77,26 +75,31 @@ services:
   jellyseerr:
     container_name: jellyseerr
     image: ghcr.io/hotio/jellyseerr:latest
-    networks:
-      - default
-      - "proxy"
     ports:
       - "5055:5055"
     environment:
       - PUID={{ username }}
       - PGID={{ username }}
       - UMASK=002
-      - TZ=Europe/Warsaw
+      - TZ={{ timezone }}
     volumes:
       - {{ container_data_path }}/jellyseer/config:/config
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyseer.entrypoints=https"
-      - "traefik.http.routers.jellyseer.rule=Host(`jellyseer.krzysztofrussek.dev`)"
-      - "traefik.http.routers.jellyseer.tls=true"
-      - "traefik.http.routers.jellyseer.tls.certresolver=cloudflare"
-      - "traefik.http.services.jellyseer.loadbalancer.server.port=5055"
 
-networks:
-  "proxy":
-    external: true
+  jellyfin:
+    container_name: jellyfin
+    image: ghcr.io/hotio/jellyfin:latest
+    restart: unless-stopped
+    ports:
+      - 8096:8096
+    environment:
+      - PUID={{ username }}
+      - PGID={{ username }}
+      - UMASK=002
+      - TZ={{ timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ container_data_path }}/jellyfin/config:/config
+      - {{ storage_path }}:/data/media:rw
+    devices:
+      - /dev/dri:/dev/dri
+

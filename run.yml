@@ -8,5 +8,4 @@
     - { role: docker, tags: docker }
     - { role: portainer, tags: portainer }
     - { role: traefik, tags: traefik }
-    - { role: jellyfin, tags: jellyfin }
     - { role: arr-stack, tags: arr-stack }
