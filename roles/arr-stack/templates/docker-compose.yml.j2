@@ -13,11 +13,18 @@ services:
       - WEBUI_PORTS=8080/tcp,8080/udp
       - VPN_ENABLED=true
       - VPN_PROVIDER=generic
-      - VPN_LAN_NETWORK=192.168.55.0/24
+      - VPN_LAN_NETWORK=192.168.1.0/24
       - VPN_CONF=wg0
-      # - VPN_ADDITIONAL_PORTS
-      - VPN_KEEP_LOCAL_DNS=false
-      - PRIVOXY_ENABLED=false
+      - VPN_LAN_LEAK_ENABLED=false #
+      - VPN_EXPOSE_PORTS_ON_LAN #
+      - VPN_AUTO_PORT_FORWARD=true #
+      - VPN_AUTO_PORT_FORWARD_TO_PORTS=6881 #
+      - VPN_FIREWALL_TYPE=auto #
+      - VPN_HEALTHCHECK_ENABLED=true #
+      - VPN_NAMESERVERS=1.1.1.1,8.8.8.8#
+      - PRIVOXY_ENABLED=false #
+      - UNBOUND_ENABLED=false #
+      - UNBOUND_NAMESERVERS #
     cap_add:
       - NET_ADMIN
     sysctls:
